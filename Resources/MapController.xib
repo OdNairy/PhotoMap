@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MapController" customModule="PhotoMap" customModuleProvider="target">
+            <connections>
+                <outlet property="mapView" destination="56d-Od-yFP" id="jsC-AP-nbn"/>
+                <outlet property="view" destination="iN0-l3-epB" id="nsU-v0-og9"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="56d-Od-yFP">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <gestureRecognizers/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="Pf5-ml-n8F"/>
+                        <outletCollection property="gestureRecognizers" destination="cnb-uh-b6U" appends="YES" id="mbh-qy-An8"/>
+                    </connections>
+                </mapView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="56d-Od-yFP" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="3Lr-Kv-EtN"/>
+                <constraint firstAttribute="bottom" secondItem="56d-Od-yFP" secondAttribute="bottom" id="8rZ-FG-SZY"/>
+                <constraint firstItem="56d-Od-yFP" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="NI9-aU-Cnv"/>
+                <constraint firstAttribute="trailing" secondItem="56d-Od-yFP" secondAttribute="trailing" id="meg-Mk-5VU"/>
+            </constraints>
+        </view>
+        <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="cnb-uh-b6U">
+            <connections>
+                <action selector="addNewPin:" destination="-1" id="OdW-vF-74r"/>
+            </connections>
+        </pongPressGestureRecognizer>
+    </objects>
+</document>
