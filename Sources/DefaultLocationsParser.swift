@@ -26,6 +26,17 @@ enum ParserError: Error {
     case keyNotFound(String)
 }
 
+class NetworkImporter: DBImporter {
+    func shouldImport() -> Bool {
+        return true
+    }
+    func importToDatabase(realm: Realm) {
+        let url = URL(string: "")!
+        try! Data(contentsOf: url)
+        
+    }
+}
+
 final class DefaultLocationsImporter: DBImporter {
     let parser: LocationsParser
     
@@ -69,8 +80,8 @@ class LocationsParser {
         
         let locations = locationsJSON.map { locationJSON -> Location? in
             guard let latitude = locationJSON["lat"].double,
-                let longitude = locationJSON["lng"].double,
-                let name = locationJSON["name"].string else {
+                  let longitude = locationJSON["lng"].double,
+                  let name = locationJSON["name"].string else {
                     debugPrint("Cannot parse JSON: \(locationJSON)")
                     return nil
             }

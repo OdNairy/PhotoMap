@@ -45,6 +45,16 @@ class Location {
     }
 }
 
+extension Location: Equatable {
+    static func ==(left: Location, right: Location) -> Bool{
+        return left.latitude == right.latitude
+            && left.longitude == right.longitude
+            && left.name == right.name
+            && left.id == right.id
+            && left.notes == right.notes
+    }
+}
+
 
 
 class LocationRealm: Object {

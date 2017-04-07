@@ -12,9 +12,13 @@ import ObjectMapper
 import RealmSwift
 import SwiftyJSON
 
-protocol Containable: class, UIViewControllerType {}
-extension String: Error {}
+protocol LocationManager{
+    var location:CLLocation? {get}
+    func requestWhenInUseAuthorization()
+    func startUpdatingLocation()
+}
 
+extension CLLocationManager: LocationManager {}
 
 final class MapListContainerController: UIViewController {
     enum ContentType {
@@ -41,7 +45,7 @@ final class MapListContainerController: UIViewController {
     var locations: [Location] = []
     var locationDBService: DBServiceClass? = LocationDBService()
     
-    let locationManager = CLLocationManager()
+    var locationManager: LocationManager = CLLocationManager()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,6 +53,7 @@ final class MapListContainerController: UIViewController {
         locationManager.startUpdatingLocation()
         
         configureViewPresentation(childVC: R.storyboard.main.locationsMap()!)
+        
         configureViewData()
         
         if CLLocationManager.authorizationStatus() == .notDetermined {
@@ -72,7 +77,7 @@ final class MapListContainerController: UIViewController {
         childVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         childVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         childVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        
+        childVC.didMove(toParentViewController: self)
     }
     
     func configureViewData(useCache: Bool = false){

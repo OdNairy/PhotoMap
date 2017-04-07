@@ -32,19 +32,30 @@ final class ListController: UIViewController, LocationConfigurable {
         self.locations = locations ?? []
         if let userCoordinates = delegate?.userLocationCoordinates {
 
-            let userLocation = CLLocation(latitude: userCoordinates.latitude, longitude: userCoordinates.longitude)
-            self.locations = self.locations.sorted{ (loc1, loc2) -> Bool in
-                let distance1 = CLLocation(latitude: CLLocationDegrees(loc1.latitude),
-                                           longitude: CLLocationDegrees(loc1.latitude))
-                    .distance(from: userLocation)
-                let distance2 = CLLocation(latitude: CLLocationDegrees(loc2.latitude),
-                                           longitude: CLLocationDegrees(loc2.latitude))
-                    .distance(from: userLocation)
-                
-                return distance1 < distance2
-            }
+            self.locations = self.locations.sort(for: userCoordinates)
+            
+            
         }
         self.tableView.reloadData()
+    }
+}
+
+extension Sequence where Iterator.Element == Location {
+    func sort(for userCoordinates:CLLocationCoordinate2D) -> [Location]{
+        let userLocation = CLLocation(latitude: userCoordinates.latitude, longitude: userCoordinates.longitude)
+
+        return self.sorted{ (loc1, loc2) -> Bool in
+            let distance1 = loc1.coreLocation.distance(from: userLocation)
+            let distance2 = loc2.coreLocation.distance(from: userLocation)
+            return distance1 < distance2
+        }
+    }
+}
+
+extension Location {
+    var coreLocation: CLLocation {
+        return CLLocation(latitude: CLLocationDegrees(latitude),
+                   longitude: CLLocationDegrees(longitude))
     }
 }
 
@@ -73,10 +84,11 @@ extension ListController: UITableViewDelegate {
 final class LocationCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
+    var location: Location?
     
     func configure(_ location: Location, userCoordinates: CLLocationCoordinate2D? = nil){
         titleLabel.text = location.name
-        
+        self.location = location
         guard let userCoordinates = userCoordinates else {
             distanceLabel.text = nil
             return

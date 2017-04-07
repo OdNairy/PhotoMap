@@ -10,6 +10,7 @@ import XCTest
 import CoreLocation
 @testable import PhotoMap
 
+
 class PhotoMapTests: XCTestCase {
     
     override func setUp() {
@@ -21,6 +22,8 @@ class PhotoMapTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
+    
+    
     
     func testMapListState() {
         let mapListVC = R.storyboard.main.mapList()!
@@ -50,17 +53,21 @@ class PhotoMapTests: XCTestCase {
         XCTAssertEqual(stubService!.saveCallCount, 1)
         
         let location = mapListVC.locations.first!
+        XCTAssertEqual(location.name, "zero point")
         XCTAssertEqual(location.latitude, 42)
         XCTAssertEqual(location.longitude, 18)
+        
+        if let location = stubService?.allObjects().first {
+            XCTAssertEqual(location.name, "zero point")
+            XCTAssertEqual(location.latitude, 42)
+            XCTAssertEqual(location.longitude, 18)
+        }
     }
     
     func testDBUse() {
-        func randomLocation() -> Location {
-            return Location(latitude: CGFloat(arc4random_uniform(40)),
-                            longitude: CGFloat(arc4random_uniform(40)), name: "")
-        }
         
         let mapListVC = R.storyboard.main.mapList()!
+        
         
         let stubService = DBServiceStub([])
         for _ in 0..<5 {
@@ -158,15 +165,3 @@ class PhotoMapTests: XCTestCase {
 }
 
 
-final class DBServiceStub: DBServiceClass<Location> {
-    var stubLocations: [Location] = []
-    override func allObjects() -> [(Location)] {
-        return stubLocations
-    }
-    
-    var saveCallCount = 0
-    override func save(_ entity: Location) {
-        saveCallCount += 1
-        stubLocations.append(entity)
-    }
-}
